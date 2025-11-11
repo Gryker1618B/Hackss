@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bread Cheater 3.0</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the low-res, square aesthetic */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #0d111c;
+            color: #d1d5db;
+            /* Use padding for surrounding space, not margin */
+            padding: 1rem; 
+            box-sizing: border-box;
+            overflow-y: hidden; /* CRITICAL: Prevent scrolling */
+        }
+
+        .hack-container {
+            /* Full width, max-width centered, square borders */
+            width: 95%; 
+            max-width: 42rem;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #0a0a0a; 
+            border: 2px solid #38bdf8;
+            padding: 16px;
+            box-shadow: 0 0 10px #38bdf840; 
+        }
+
+        /* --- TIGHTER VERTICAL SPACING --- */
+        .hack-container header { margin-bottom: 10px; padding-bottom: 8px; }
+        .hack-container .space-y-2 > :not([hidden]) ~ :not([hidden]) {
+            margin-top: 0.5rem; 
+            margin-bottom: 0.5rem;
+        }
+
+        .hack-button {
+            transition: background-color 0.1s, color 0.1s;
+            border: 1px solid #d1d5db; 
+            border-radius: 0; /* Extremely square look */
+            user-select: none;
+            filter: brightness(1.1);
+        }
+
+        /* --- Custom Slider Styling --- */
+        #aggression-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 10px; 
+            background: transparent;
+            border-radius: 0; 
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Thumb styles (The large circular thumb) */
+        #aggression-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px; 
+            height: 20px;
+            background: #38bdf8; 
+            cursor: pointer;
+            border-radius: 50%; /* CIRCLE SHAPE */
+            border: 1px solid #0d111c;
+            margin-top: -7px; /* Center vertically on the 6px track height */
+        }
+        
+        #aggression-slider::-moz-range-thumb {
+            width: 20px; 
+            height: 20px;
+            background: #38bdf8;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 1px solid #0d111c;
+        }
+
+        /* Track styles */
+        #aggression-slider::-webkit-slider-runnable-track,
+        #aggression-slider::-moz-range-track {
+            width: 100%;
+            height: 6px; 
+            background: #2d3748; 
+            border-radius: 0;
+        }
+
+        /* Disabled state styling for the slider (visibly dimmed) */
+        #aggression-slider[disabled] {
+            opacity: 0.35; /* Much lower opacity to clearly indicate disabled state */
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen">
+
+    <!-- Main Cheat Panel Container: Optimized for screen fit -->
+    <div class="hack-container">
+
+        <!-- Header Block -->
+        <header class="border-b border-[#38bdf8] text-center">
+            <h1 class="text-3xl font-bold text-[#38bdf8]">Bread Cheater 3.0</h1>
+            <p class="text-sm text-yellow-400">Beta 1.3</p>
+            <div id="connection-status" class="mt-1 text-sm text-[#10b981]">
+                <!-- Initial text set by JS -->
+                Connected to breadtooth 0%
+            </div>
+        </header>
+
+        <!-- Hack List - Using tight vertical spacing (space-y-2) -->
+        <div class="space-y-2 text-base mt-2">
+
+            <!-- Aimbot / Aimassist (The Master Switch) -->
+            <div class="hack-item">
+                <p class="text-white mb-1">Aimbot/Aimassist</p>
+                <button id="aimbot" onclick="toggleHack('aimbot')" 
+                        class="hack-button w-full sm:w-2/5 p-2 text-white bg-gray-900">
+                    Toggle Aimbot
+                </button>
+            </div>
+
+            <!-- Aggression Level (Controlled by Aimbot) -->
+            <div class="hack-item pt-1">
+                <p class="text-white mb-1">Aggression Level</p>
+                <!-- Starts at 1 and disabled -->
+                <input type="range" min="1" max="100" value="1" id="aggression-slider" disabled>
+            </div>
+
+            <hr class="border-[#2d3748] my-3">
+
+            <!-- Remaining Hacks in a tighter grid (gap-y-2) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
+                
+                <!-- Wallhacks -->
+                <div class="hack-item">
+                    <p class="text-white mb-1">Wallhacks</p>
+                    <button id="wallhacks" onclick="toggleHack('wallhacks')" 
+                            class="hack-button w-full p-2 text-white bg-gray-900">
+                        Toggle Wallhacks
+                    </button>
+                </div>
+
+                <!-- Autobread (Auto throw bread) -->
+                <div class="hack-item">
+                    <p class="text-white mb-1">Autobread (Auto throw bread)</p>
+                    <button id="autobread" onclick="toggleHack('autobread')" 
+                            class="hack-button w-full p-2 text-white bg-gray-900">
+                        Toggle Autobread
+                    </button>
+                </div>
+
+                <!-- X-ray (Activate bread X-ray) -->
+                <div class="hack-item">
+                    <p class="text-white mb-1">X-ray (Activate bread X-ray)</p>
+                    <button id="xray" onclick="toggleHack('xray')" 
+                            class="hack-button w-full p-2 text-white bg-gray-900">
+                        Toggle X-ray
+                    </button>
+                </div>
+
+                <!-- Jesus (Walk on water) -->
+                <div class="hack-item">
+                    <p class="text-white mb-1">Jesus (Walk on water)</p>
+                    <button id="jesus" onclick="toggleHack('jesus')" 
+                            class="hack-button w-full p-2 text-white bg-gray-900">
+                        Toggle Jesus Mode
+                    </button>
+                </div>
+
+                <!-- Autofill (Auto fill wagon/carts) -->
+                <div class="hack-item">
+                    <p class="text-white mb-1">Autofill (Auto fill wagon/carts)</p>
+                    <button id="autofill" onclick="toggleHack('autofill')" 
+                            class="hack-button w-full p-2 text-white bg-gray-900">
+                        Toggle Autofill
+                    </button>
+                </div>
+
+                <!-- Chicken Jockey (Bread version) -->
+                <div class="hack-item">
+                    <p class="text-white mb-1">Chicken Jockey (Bread version)</p>
+                    <button id="chickenJockey" onclick="toggleHack('chickenJockey')" 
+                            class="hack-button w-full p-2 text-white bg-gray-900">
+                        Toggle chicken Jockey
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <!-- End Hack List -->
+
+        <!-- Footer / Status -->
+        <footer class="mt-4 pt-2 border-t border-[#2d3748] text-center text-xs text-[#4b5563]">
+            <p>Status: Injection successful. Awaiting command input...</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const hacks = {
+            aimbot: false,
+            wallhacks: false,
+            autobread: false,
+            xray: false,
+            jesus: false,
+            autofill: false,
+            chickenJockey: false
+        };
+
+        let breadtoothPercentage = 0;
+
+        /**
+         * Initializes the breadtooth connection status with a random, high percentage.
+         */
+        function initializeBreadtooth() {
+            // Random percentage between 51 and 99
+            breadtoothPercentage = Math.floor(Math.random() * (99 - 51 + 1)) + 51;
+            const statusElement = document.getElementById('connection-status');
+            
+            statusElement.textContent = `Connected to breadtooth ${breadtoothPercentage}%`;
+
+            // Visually indicates high connection/risk
+            if (breadtoothPercentage > 80) {
+                statusElement.classList.add('text-red-500');
+                statusElement.classList.remove('text-[#10b981]');
+            } else {
+                statusElement.classList.add('text-[#10b981]');
+                statusElement.classList.remove('text-red-500');
+            }
+        }
+
+        /**
+         * Updates the slider's background to visually represent the blue fill up to the thumb.
+         */
+        function updateSliderColor() {
+            const slider = document.getElementById('aggression-slider');
+            if (!slider) return;
+
+            // Calculate the percentage of the slider's value
+            const value = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            
+            // Use a linear gradient to fill the track up to the thumb's position with blue (#38bdf8)
+            // The rest remains the dark track color (#2d3748)
+            slider.style.background = `linear-gradient(to right, #38bdf8 0%, #38bdf8 ${value}%, #2d3748 ${value}%, #2d3748 100%)`;
+        }
+
+        /**
+         * Enables or disables the aggression slider based on the Aimbot state.
+         */
+        function updateAggressionSliderState() {
+            const slider = document.getElementById('aggression-slider');
+            if (!slider) return;
+
+            if (hacks.aimbot) {
+                slider.removeAttribute('disabled');
+                slider.classList.remove('opacity-35', 'cursor-not-allowed');
+            } else {
+                slider.setAttribute('disabled', 'true');
+                // Dim the slider to show it's disabled
+                slider.classList.add('opacity-35', 'cursor-not-allowed');
+                // Reset slider value to 1 when disabled
+                slider.value = 1;
+                updateSliderColor(); // Update color to show no fill
+            }
+        }
+
+
+        /**
+         * Toggles the visual state of a hack button.
+         */
+        function toggleHack(id) {
+            const button = document.getElementById(id);
+            if (!button) return;
+
+            // Toggle the internal state
+            hacks[id] = !hacks[id];
+            const isActive = hacks[id];
+            
+            // Remove previous background classes
+            button.classList.remove('bg-gray-900', 'bg-green-600');
+
+            // Determine the base text for the button
+            let buttonText = `Toggle ${id.charAt(0).toUpperCase() + id.slice(1)}`;
+            if (id === 'jesus') {
+                buttonText = 'Toggle Jesus Mode';
+            } else if (id === 'chickenJockey') {
+                buttonText = 'Toggle chicken Jockey';
+            }
+
+            if (isActive) {
+                // Style for ON state (Green/Activated)
+                button.classList.add('bg-green-600');
+                button.textContent = buttonText.replace('Toggle', 'Disable');
+            } else {
+                // Style for OFF state (Gray/Neutral)
+                button.classList.add('bg-gray-900');
+                button.textContent = buttonText;
+            }
+
+            // Specific logic for Aimbot to control the aggression slider
+            if (id === 'aimbot') {
+                updateAggressionSliderState();
+            }
+        }
+
+        // --- Event Listeners and Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initialize the static connection percentage
+            initializeBreadtooth();
+            
+            // 2. Set the initial slider color fill (starts at 1%)
+            updateSliderColor();
+
+            // 3. Ensure slider is disabled on load (Aimbot is false by default)
+            updateAggressionSliderState(); 
+
+            // 4. Attach event listener to the slider to update its color dynamically when dragged
+            const slider = document.getElementById('aggression-slider');
+            if (slider) {
+                slider.addEventListener('input', updateSliderColor);
+            }
+        });
+    </script>
+</body>
+</html>
+
+
